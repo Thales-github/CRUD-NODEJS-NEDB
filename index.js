@@ -22,9 +22,8 @@ servidor.get("/produtos", (req, res) => {
     });
 });
 
-
 servidor.get("/produtos/:codigoProduto", (req, res) => {
-    db.findOne({_id: req.params.codigoProduto}).exec((erro, dados) => {
+    db.findOne({ _id: req.params.codigoProduto }).exec((erro, dados) => {
 
         if (erro) {
             console.error(erro);
@@ -66,6 +65,17 @@ servidor.put("/produtos/:codigoProduto", (req, res) => {
             });
         }
     });
+});
+
+servidor.delete("/produtos/:codigoProduto", (req, res) => {
+    db.remove({ _id: req.params.codigoProduto }, {}, (erro, registrosRemovidos) => {
+        if (erro) {
+            console.error(erro);
+            return;
+        }
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).json({ registrosRemovidos: registrosRemovidos });
+    })
 });
 
 /* definindo a porta que a aplicação vai utilizar nas chamadas http e em seguida passando 
