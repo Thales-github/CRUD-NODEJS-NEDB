@@ -18,20 +18,40 @@ servidor.get("/produtos", (req, res) => {
             console.error(erro);
             return;
         }
-        res.json(dados);
+        res.status(200).json(dados);
     });
 });
 
 servidor.post("/produtos", (req, res) => {
-    res.json(req.body);
+    // res.json(req.body);
 
     db.insert(req.body, (erro, novoProduto) => {
         if (erro) {
             console.error(erro);
         } else {
-            res.statusCode = 200;
+
             res.setHeader("Content-Type", "application/json");
-            res.json(novoProduto);
+            res.status(200).json(novoProduto);
+        }
+    });
+});
+
+// req.body recupera os dados enviados da requisição
+// req.params recupera os dados enviados da URL da requisição
+servidor.put("/produtos/:codigoProduto", (req, res) => {
+    // res.status(200).send(req.params.codigoProduto);
+    // res.status(200).send(req.body);
+
+    db.update({
+        _id: req.params.codigoProduto
+    }, req.body, (erro) => {
+        if (erro) {
+            console.error(erro);
+        } else {
+            res.setHeader("Content-Type", "application/json");
+            res.status(200).json({
+                mensagem: `Produto atualizado: ${req.params.codigoProduto}`,
+            });
         }
     });
 });
