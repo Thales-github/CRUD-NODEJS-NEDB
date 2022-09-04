@@ -22,6 +22,18 @@ servidor.get("/produtos", (req, res) => {
     });
 });
 
+
+servidor.get("/produtos/:codigoProduto", (req, res) => {
+    db.findOne({_id: req.params.codigoProduto}).exec((erro, dados) => {
+
+        if (erro) {
+            console.error(erro);
+            return;
+        }
+        res.status(200).json(dados);
+    });
+});
+
 servidor.post("/produtos", (req, res) => {
     // res.json(req.body);
 
